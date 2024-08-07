@@ -10,44 +10,53 @@ import org.openqa.selenium.support.PageFactory;
 
 public class ProductCatalogue {
     WebDriver driver;
-    
-    //constructor
+
+    // Constructor
     public ProductCatalogue(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
     // PageFactory
-    
-//    @FindBy(xpath = "//div[@class='inventory_item'][1]//button")
-//    WebElement firstItemAddToCartButton;
-    
-   @FindBy(css = ".inventory_item")
+    @FindBy(css = ".inventory_item")
     List<WebElement> products;
-   
-   By productsBy = By.cssSelector(".inventory_item");
-   By addToCart = By.cssSelector(".btn_primary");
-   
-   public List<WebElement> getProductList() {
-		//waitForElementToAppear(productsBy);
-		return products;
-	}
-   
-   public WebElement getProductByName(String productName)
-   
-	{
-		WebElement prod =	getProductList().stream().filter(product->
-		product.findElement(By.cssSelector("inventory_item_name")).getText().equals(productName)).findFirst().orElse(null);
-		System.out.println(prod);
-		return prod;
-	}
-   
-   public void addProductToCart(String productName) throws InterruptedException
-	{
-		WebElement prod = getProductByName(productName);
-		prod.findElement(addToCart).click();
 
+    @FindBy(css = ".cart_item")
+    List<WebElement> cartItems;
 
-	}
+    By productsBy = By.cssSelector(".inventory_item");
+    By addToCart = By.cssSelector(".btn_primary");
+    By cartItemBy = By.cssSelector(".cart_item");
+    By removeButton = By.id("remove-sauce-labs-bike-light");
 
+    public List<WebElement> getProductList() {
+        return products;
+    }
+
+    public WebElement getProductByName(String productName) {
+        return getProductList().stream().filter(product ->
+                product.findElement(By.cssSelector(".inventory_item_name")).getText().equals(productName)).findFirst().orElse(null);
+    }
+
+    public void addProductToCart(String productName) throws InterruptedException {
+        WebElement prod = getProductByName(productName);
+        prod.findElement(addToCart).click();
+    }
+
+    public List<WebElement> getCartItems() {
+        return cartItems;
+    }
+
+    public boolean isItemInCart(String productName) {
+        return getCartItems().stream().anyMatch(cartItem ->
+                cartItem.findElement(By.cssSelector(".inventory_item_name")).getText().equals(productName));
+    }
+
+    public void removeItemFromCart(String productName) {
+        WebElement cartItem = getCartItems().stream().filter(item ->
+                item.findElement(By.cssSelector(".inventory_item_name")).getText().equals(productName)).findFirst().orElse(null);
+        if (cartItem != null) {
+            cartItem.findElement(removeButton).click();
+        }
+    }
 }

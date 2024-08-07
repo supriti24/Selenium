@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="SwagLabs Test Suite" parallel="false">
+    <test name="SwagLabs Tests">
+        <classes>
+			<class name="Supriti.tests.VerifyLoginTest"/>
+			<class name="Supriti.tests.AddItemToCartTest"/>
+            <class name="Supriti.tests.OrderTest"/>
+            
+           <!--INVALD TEST CASES -->
+            <class name="Supriti.tests.VerifyLoginWithInvalidCredentialsTest"/>
+            <class name="Supriti.tests.RemoveItemFromCartTest"/>
+            <class name="Supriti.tests.VerifyCheckoutWithMissingInformationTest"/>
+        </classes>
+    </test>
+</suite>

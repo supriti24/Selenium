@@ -1,55 +1,59 @@
 package Supriti.tests;
 
+import Supriti.pages.CartPage;
 import Supriti.pages.LoginPage;
 import Supriti.pages.ProductCatalogue;
 import io.github.bonigarcia.wdm.WebDriverManager;
-
 import java.time.Duration;
-import java.util.List;
-
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-public class StandAloneTest {
+public class RemoveItemFromCartTest {
     WebDriver driver;
     LoginPage loginPage;
     ProductCatalogue productCatalogue;
+    CartPage cartPage;
     String productName = "Sauce Labs Backpack";
 
     @BeforeClass
     public void setup() {
-    	
-    	
         WebDriverManager.chromedriver().setup();
-        WebDriver driver = new ChromeDriver();
+        driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-		driver.manage().window().maximize();
-        loginPage = new LoginPage(driver); 
+        driver.manage().window().maximize();
+
+        loginPage = new LoginPage(driver);
         loginPage.goTo();
-        
     }
 
     @Test
-    public void e2e() throws InterruptedException {
+    public void removeItemFromCartTest() throws InterruptedException {
         loginPage.login("standard_user", "secret_sauce");
-        loginPage = new LoginPage(driver); 
+
         productCatalogue = new ProductCatalogue(driver);
-     //   List<WebElement> products = productCatalogue.getProductList();
         productCatalogue.addProductToCart(productName);
+
+        // Navigate to Cart Page
+        cartPage = new CartPage(driver);
+        cartPage.clickCart();
+        Assert.assertTrue(cartPage.verifyItemInCart(productName), "The item was not found in the cart!");
+
+        // Remove item from cart
+        cartPage.removeItemFromCart(productName);
+        Assert.assertFalse(cartPage.verifyItemInCart(productName), "The item was not removed from the cart!");
+        
+        //continue shopping
+        cartPage.continueShopping();
     }
-    
-   
-    
-    
 
     @AfterClass
     public void teardown() {
-    	  if (driver != null) {
-              driver.quit();
-          }
+        if (driver != null) {
+            driver.quit();
+        }
     }
 }

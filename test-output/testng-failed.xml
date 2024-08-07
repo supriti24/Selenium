@@ -3,13 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="Supriti.tests.StandAloneTest">
+      <class name="Supriti.tests.VerifyLoginWithValidCredentialsTest">
         <methods>
-          <include name="e2e"/>
-          <include name="setup"/>
           <include name="teardown"/>
+          <include name="setup"/>
+          <include name="invalidLoginTest"/>
         </methods>
-      </class> <!-- Supriti.tests.StandAloneTest -->
+      </class> <!-- Supriti.tests.VerifyLoginWithValidCredentialsTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
